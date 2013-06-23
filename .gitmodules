@@ -1,0 +1,21 @@
+[submodule ".janus/vdebug"]
+	path = .janus/vdebug
+	url = https://github.com/joonty/vdebug.git
+[submodule ".janus/php.vim-html-enhanced"]
+	path = .janus/php.vim-html-enhanced
+	url = https://github.com/comeonly/php.vim-html-enhanced.git
+[submodule ".janus/php.vim"]
+	path = .janus/php.vim
+	url = https://github.com/shawncplus/php.vim
+[submodule ".janus/vim-hybrid"]
+	path = .janus/vim-hybrid
+	url = https://github.com/w0ng/vim-hybrid.git
+[submodule ".janus/vim-indent-guides"]
+	path = .janus/vim-indent-guides
+	url = https://github.com/nathanaelkane/vim-indent-guides.git
+[submodule ".janus/vim-powerline"]
+	path = .janus/vim-powerline
+	url = https://github.com/Lokaltog/vim-powerline.git
+[submodule ".janus/zencoding-vim"]
+	path = .janus/zencoding-vim
+	url = https://github.com/mattn/zencoding-vim.git

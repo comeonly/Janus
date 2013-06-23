@@ -1,0 +1,171 @@
+" colorscheme
+set background=dark
+let g:hybrid_use_Xresources = 1
+colorscheme hybrid
+set cursorline
+
+" Powerline
+let g:Powerline_symbols = 'fancy'
+
+" NERDCommenter
+let g:NERDSpaceDelims=1
+
+" NERDTree
+let NERDTreeShowBookmarks=1
+let NERDTreeShowHidden=1
+let NERDTreeQuitOnOpen=1
+
+" tagbar
+let g:tagbar_autoclose = 1
+
+" SnipMate
+" Setting the author var
+let g:snips_author='Atunori Kamori <atunori.kamori@gmail.com>'
+
+" Evervim
+let g:evervim_devtoken='S=s17:U=1db7f6:E=14518854f8e:C=13dc0d42390:P=1cd:A=en-devtoken:V=2:H=4680aaccb1039478be0134a9574ceaee'
+
+" GUI Settings {
+" ==============
+    " GVIM- (here instead of .gvimrc)
+    if has('gui_running')
+        set guioptions-=l           " remove the sidebar
+        set guioptions-=L           " remove the sidebar
+        set guioptions-=r           " remove the sidebar
+        set guioptions-=R           " remove the sidebar
+        set lines=40
+        set columns=105
+        winpos 0 0
+        set background=dark
+        if has("gui_gtk2")
+            set guifont=Andale\ Mono\ Regular\ 16,Menlo\ Regular\ 15,Consolas\ Regular\ 16,Courier\ New\ Regular\ 18
+        else
+            set guifont=Andale\ Mono\ Regular:h16,Menlo\ Regular:h15,Consolas\ Regular:h16,Courier\ New\ Regular:h18
+        endif
+        if has('gui_macvim')
+            set transparency=3          " Make the window slightly transparent
+        endif
+    else
+        if &term == 'xterm' || &term == 'screen'
+            set t_Co=256                 " Enable 256 colors to stop the CSApprox warning and make xterm vim shine
+        endif
+        "set term=builtin_ansi       " Make arrow and other keys work
+    endif
+" }
+
+" サーチハイライトををESC二回で消す
+nnoremap <Esc><Esc> :nohlsearch<CR><Esc>
+
+" ヴィジュアルモードで選択したテキストをnで検索する(レジスタv使用)
+vnoremap <silent> n "vy/\V<C-r>=substitute(escape(@v,'\/'),"\n",'\\n','g')<CR><CR>
+
+" 括弧補完
+inoremap { {}<LEFT>
+inoremap [ []<LEFT>
+inoremap ( ()<LEFT>
+inoremap " ""<LEFT>
+inoremap ' ''<LEFT>
+
+" replace
+" For function argument with comment header
+nnoremap <leader>ra viwy?^[\ta-z ]*\<function\><CR>/{<CR>%v%V[/:s/\V<C-r>"//gc<left><left><left>
+" For variable in function
+nnoremap <leader>rf viwy?^[\ta-z ]*\<function\><CR>/{<CR>%v%V:s/\V<C-r>"//gc<left><left><left>
+" For local replace
+nnoremap <leader>rl gd[{V%:s/<C-R>///gc<left><left><left>
+" For global replace
+nnoremap <leader>rg gD:%s/<C-R>///gc<left><left><left>
+
+" 検索語が画面中央にくるように
+nmap n nzz
+nmap N Nzz
+
+" tab
+nmap <silent> <leader>tt :set ts=2 sw=2 et<CR>
+nmap <silent> <leader>tf :set ts=4 sw=4 et<CR>
+set noexpandtab
+set ts=4 sw=4 et
+set listchars=tab:▸.,trail:.,extends:>,precedes:<
+
+""""" PHP用設定 """"""""
+" :makeでPHP構文チェック
+au FileType php setlocal makeprg=php\ -l\ %
+au FileType php setlocal errorformat=%m\ in\ %f\ on\ line\ %l
+
+" PHPの関数やクラスの折りたたみ(非常に重い）
+let php_folding = 0
+
+" 文字列の中のSQLをハイライト
+let php_sql_query = 1
+
+" Baselibメソッドのハイライト
+let php_baselib = 1
+
+" HTMLもハイライト
+let php_htmlInStrings = 1
+
+" <? を無効にする→ハイライト除外にする
+let php_noShortTags = 1
+
+" ] や ) の対応エラーをハイライト
+let php_parent_error_close = 1
+let php_parent_error_open = 1
+
+"SQLのPHP文字リテラルへの整形(:Sqltop, :Sqlfromp)
+function! SQLToPHP()
+  %s/^\(.\+\)$/"\1 " \./g
+  normal G$
+  execute "normal ?.<CR>"
+  normal xxggVG
+  echo "Convert to PHP String is finished."
+endfunction
+command! Sqltop :call SQLToPHP()
+
+function! SQLFromPHP()
+  %s/^"\(.\+\) " *\.*$/\1/g
+  normal ggVG
+  echo "Convert from PHP String is finished."
+endfunction
+command! Sqlfromp :call SQLFromPHP()
+
+" Function to locate endpoints of a PHP block {{{
+function! PhpBlockSelect(mode)
+    let motion = "v"
+    let line = getline(".")
+    let pos = col(".")-1
+    let end = col("$")-1
+
+    if a:mode == 1
+        if line[pos] == '?' && pos+1 < end && line[pos+1] == '>'
+            let motion .= "l"
+        elseif line[pos] == '>' && pos > 1 && line[pos-1] == '?'
+            " do nothing
+        else
+            let motion .= "/?>/e\<CR>"
+        endif
+        let motion .= "o"
+        if end > 0
+            let motion .= "l"
+        endif
+        let motion .= "?<\\?php\\>\<CR>"
+    else
+        if line[pos] == '?' && pos+1 < end && line[pos+1] == '>'
+            " do nothing
+        elseif line[pos] == '>' && pos > 1 && line[pos-1] == '?'
+            let motion .= "h?\\S\<CR>""
+        else
+            let motion .= "/?>/;?\\S\<CR>"
+        endif
+        let motion .= "o?<\\?php\\>\<CR>4l/\\S\<CR>"
+    endif
+
+    return motion
+endfunction
+" }}}
+" Mappings to select full/inner PHP block
+nmap <silent> <expr> vaP PhpBlockSelect(1)
+nmap <silent> <expr> viP PhpBlockSelect(0)
+" Mappings for operator mode to work on full/inner PHP block
+omap <silent> aP :silent normal vaP<CR>
+omap <silent> iP :silent normal viP<CR>
+

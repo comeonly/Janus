@@ -1,0 +1,8 @@
+set guifont=Source\ Code\ Pro\ for\ Powerline:h16,DejaVu\ Sans\ Mono\ for\ Powerline:h16,Andale\ Mono\ Regular:h16,Menlo\ Regular:h15,Consolas\ Regular:h16,Courier\ New\ Regular:h18
+
+set background=dark
+set lines=40
+set columns=105
+
+" set imdisable
+

@@ -1,0 +1,28 @@
+call janus#disable_plugin('narrowregion')
+" call janus#disable_plugin('watchtower')
+" call janus#disable_plugin('vimwiki')
+" call janus#disable_plugin('snipmate')
+call janus#disable_plugin('zoomwin')
+
+" vim-indent-guides
+let g:indent_guides_auto_colors = 1
+let g:indent_guides_guide_size = 1
+let g:indent_guides_enable_on_vim_startup = 1
+let g:indent_guides_exclude_filetypes = ['help', 'nerdtree']
+
+" zencoding
+let g:user_zen_leader_key = '<C-Z>'
+let g:user_zen_expandabbr_key = '<C-Z>z'
+
+let g:vdebug_keymap = {
+\   'run':'<F1>',
+\   'run_to_cursor':'<F11>',
+\   'step_over':'<F9>',
+\   'step_into':'<F8>',
+\   'step_out':'<F7>',
+\   'close':'<F10>',
+\   'detach':'<F2>',
+\   'set_breakpoint':'<F6>',
+\   'get_context':'<F3>',
+\   'eval_under_cursor':'<F12>',
+\}
